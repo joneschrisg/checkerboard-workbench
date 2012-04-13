@@ -1,0 +1,70 @@
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Workbench</title>
+  <!-- All pixel lengths in the model here are scaled down by a factor
+       of 10. So 800 device pixels == 80 CSS pixels in the HTML/CSS
+       rules here. -->
+  <script src="workbench.js"></script>
+  <style>
+body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: scroll;
+  margin: 10px;
+}
+
+#controls {
+  position: absolute;
+  right: 0; top: 0;
+  margin: 15px;
+  text-align: right;
+}
+
+#model {
+  position: absolute;
+  top: 0; left: 0;
+}
+
+#document {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100px;
+  height: 1000px;
+  background-color: #ddd;
+}
+
+#displayport {
+  position: absolute;
+  left: 0; top: 0;
+  width: 200px;
+  height: 200px;
+  border: 1px dotted blue;
+  background-color: #999;
+}
+
+#screen {
+  position: absolute;
+  left: 0; top: 0;
+  width: 48px;
+  height: 80px;
+  border: 1px solid blue;
+}
+  </style>
+</head>
+
+<body onload="load();">
+  <div id="model">
+    <div id="document"></div>
+    <div id="displayport"></div>
+    <div id="screen"></div>
+  </div>
+
+  <div id="controls">
+    <button onclick="run();">Run</button>
+  </div>
+</body>
+
+</html>
