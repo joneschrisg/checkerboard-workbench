@@ -7,6 +7,12 @@ function load() {
   doc = document.getElementById('document');
   screen = document.getElementById('screen');
   displayport = document.getElementById('displayport');
+
+  screen.width = 48;
+  screen.height = 80;
+
+  displayport.width = 200;
+  displayport.height = 200;
 }
 
 /**
@@ -27,8 +33,8 @@ function reset() {
 
   screen.x = 0;
   screen.y = 0;
-  displayport.x = 0;
-  displayport.y = 0;
+
+  resetDisplayport();
 }
 
 function run() {
@@ -51,7 +57,7 @@ function sample(t_i) {
   screen.x += pe.dxdt * dt;
   screen.y += pe.dydt * dt;
 
-  setDisplayport();
+  updateDisplayport();
 
   render();
 
@@ -64,9 +70,44 @@ function sample(t_i) {
   }
 }
 
-function setDisplayport() {
-  // magic heuristics go here
+//-----------------------------------------------------------------------------
+
+function resetDisplayport() {
+  displayport.x = 0;
+  displayport.y = 0;
 }
+
+function updateDisplayport() {
+  var sx = screen.x;
+  var sy = screen.y;
+
+  // XXX ignoring horizontal scrolling for now
+  // XXX ignoring up-scrolling for now
+  if ((sy + screen.height) > (displayport.y + displayport.height))
+    redrawAt(sx, sy + screen.height);
+}
+
+var kDrawDelay = 100;         // milliseconds
+var drawQ = [];
+function redrawAt(x, y) {
+  drawQ.push({ x: x, y: y});
+  drawLoop();
+}
+
+function drawLoop() {
+  if (drawQ.length)
+    setTimeout(drawFinished, kDrawDelay / 10);
+}
+
+function drawFinished() {
+  var fd = drawQ.shift();
+  displayport.x = fd.x;
+  displayport.y = fd.y;
+
+  drawLoop();
+}
+
+//-----------------------------------------------------------------------------
 
 function render() {
   screen.style.left = screen.x +'px';
@@ -74,4 +115,10 @@ function render() {
   window.scrollTo(screen.x - 10, screen.y - 10);
   displayport.style.left = displayport.x +'px';
   displayport.style.top = displayport.y +'px';
+
+  recordStats();
+}
+
+function recordStats() {
+  // fill me in
 }
